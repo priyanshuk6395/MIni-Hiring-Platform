@@ -22,6 +22,8 @@ The entire application—including all components, database logic, API mocks, an
 
 -----
 
+## 🔗 Deployed Link: https://m-ini-hiring-platform.vercel.app/
+
 ## 🚀 Getting Started
 
 ### 1\. Prerequisites
