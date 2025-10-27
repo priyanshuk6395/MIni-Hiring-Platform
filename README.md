@@ -1,152 +1,179 @@
-# TALENTFLOW - Mini Hiring Platform
+# TALENTFLOW — Mini Hiring Platform
 
-TALENTFLOW is a high-fidelity, single-file React application that simulates a mini hiring platform. It is fully persistent in your browser using **IndexedDB (via Dexie.js)** and features a complete mock API powered by **Mock Service Worker (MSW)**.
+A high-fidelity React application that simulates a hiring platform as a portfolio piece. TALENTFLOW demonstrates advanced frontend capabilities — complex state management, persistent local storage, realistic API mocking, drag-and-drop UIs, and list virtualization — built by a developer with a backend / MLOps / cloud focus to showcase full‑stack proficiency.
 
-The entire application—including all components, database logic, API mocks, and state management—is contained within `App.jsx`.
-
-## ✨ Key Features
-
-  * **Persistent Local Database:** All data (jobs, candidates, assessments) is stored in IndexedDB, so your state persists across page loads.
-  * **Realistic Mock API:** MSW intercepts all network requests, simulating real-world API behavior, including artificial latency and random 500-level errors.
-  * **Jobs Board:**
-      * Create, list, and filter jobs.
-      * Drag-and-drop reordering of jobs with optimistic updates and error rollback.
-  * **Candidate Management:**
-      * **Create Candidates:** Add new candidates via a modal form and assign them to active jobs.
-      * **Virtualized List:** Smoothly renders a list of 1,000+ candidates using `react-window`.
-      * **Kanban Board:** A fully functional drag-and-drop Kanban board to move candidates between stages (Applied, Screen, Tech, etc.).
-  * **Assessment Builder:**
-      * Dynamically create multi-section assessments with various question types (text, single/multi-choice, numeric, file).
-      * Includes a live preview pane to see the fillable form as you build it.
-      * Supports conditional logic (e.g., "show Q2 only if Q1 is 'Yes'").
-
------
-
-## 🔗 Deployed Link: https://m-ini-hiring-platform.vercel.app/
-
-## 🚀 Getting Started
-
-### 1\. Prerequisites
-
-  * [Node.js](https://nodejs.org/) (v18 or later)
-  * A package manager (npm, yarn, or pnpm)
-  * A Vite-based React project (`npm create vite@latest`)
-
-### 2\. Dependencies
-
-Install the required dependencies:
-
-```bash
-npm install react-dom dexie msw@^2 react-window @dnd-kit/core @dnd-kit/modifiers @dnd-kit/sortable @dnd-kit/utilities lucide-react
-```
-
-### 3\. Setup Files
-
-You must create four specific files in your project:
-
-**1. `tailwind 4.0 setup`**
-
-
-**2. `src/index.css`** (your main CSS file)
-
-```css
-@import "tailwindcss";
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9; /* coolGray-100 */
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #94a3b8; /* coolGray-400 */
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #64748b; /* coolGray-500 */
-}
-```
-
-**3. `src/App.jsx`**
-
-  * Copy and paste the entire `App.jsx` content you were provided into this file.
-
-**4. `src/main.jsx`** (your app's entry point)
-
-  * This file is crucial for starting the MSW worker.
-
-<!-- end list -->
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App, { worker } from './App.jsx'
-import './index.css'
-
-// Start the service worker
-worker.start({ onUnhandledRequest: 'bypass' }).then(() => {
-  ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-  )
-})
-```
-
-### 4\. Initialize MSW
-
-Run the MSW `init` command to create the Service Worker file in your `public` directory.
-
-```bash
-npx msw init public/
-```
-
-### 5\. Run the App
-
-```bash
-npm run dev
-```
-
-Open `http://localhost:5173` (or the port Vite assigns) in your browser. The app will load, seed the database, and be ready to use.
-
------
-
-## 🛠️ Tech Stack
-
-  * **React:** Functional components, Hooks
-  * **Styling:** Tailwind CSS
-  * **Local Database:** Dexie.js (wrapper for IndexedDB)
-  * **API Mocking:** Mock Service Worker (MSW)
-  * **Drag & Drop:** `@dnd-kit`
-  * **List Virtualization:** `react-window`
-  * **Icons:** `lucide-react`
-
------
-
-## 🤖 Mock API Endpoints
-
-All endpoints are defined in `App.jsx` and interact with the Dexie database.
-
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/jobs` | Fetches jobs with pagination, search, and status filter. |
-| `POST` | `/jobs` | Creates a new job. |
-| `PATCH`| `/jobs/:id` | Updates a specific job. |
-| `PATCH`| `/jobs/reorder` | Bulk updates job order (for D\&D). |
-| `GET` | `/candidates` | Fetches candidates with pagination, search, and stage filter. |
-| `POST` | `/candidates` | Creates a new candidate and assigns to a job. |
-| `PATCH`| `/candidates/:id`| Updates a candidate (used for changing stages). |
-| `GET` | `/candidates/:id/timeline` | Fetches a mock event timeline for a candidate. |
-| `GET` | `/assessments/:jobId` | Fetches the assessment structure for a job. |
-| `PUT` | `/assessments/:jobId` | Creates or replaces the assessment for a job. |
-| `POST` | `/assessments/:jobId/submit` | Submits a candidate's assessment responses. |
 ---
 
-## 👤 Author
-I'm a developer passionate about building robust and scalable systems. My interests include backend engineering, and cloud computing. This project was a chance to dive deep into the frontend and its ecosystem.
+## Table of contents
+- [Overview](#overview)
+- [Key features](#key-features)
+- [Tech stack](#tech-stack)
+- [Getting started](#getting-started)
+- [Project structure](#project-structure)
+- [Operational notes & troubleshooting](#operational-notes--troubleshooting)
+- [Project purpose](#project-purpose)
+- [Author](#author)
 
-GitHub: https://github.com/priyanshuk6395
+---
 
-LinkedIn: https://linkedin.com/in/priyanshu-kumar-51452b232/
+## Overview
+TALENTFLOW is a client-side hiring platform demo that stores data locally using IndexedDB (via Dexie.js) and exposes a realistic, intercepting mock API via Mock Service Worker (MSW). The mock API simulates latency and intermittent write failures to exercise optimistic UI patterns and rollback behavior. The app includes a Jobs board, Candidate management (virtualized list + Kanban), and an Assessment Builder with conditional logic and a live preview.
+
+---
+
+## Key features
+
+- Persistent local database
+  - Dexie.js on top of IndexedDB stores jobs, candidates, assessments, and responses so data survives page reloads.
+
+- Realistic mock API
+  - Mock Service Worker (MSW) intercepts requests and simulates latency.
+  - Write operations intentionally inject a small error rate (configurable, ~5–15%) so the UI handles failures gracefully.
+
+- Jobs board
+  - Create and list jobs with pagination and filters.
+  - Drag-and-drop reordering with optimistic UI updates and rollback on server errors.
+
+- Candidate management
+  - Virtualized list (react-window) to render 1,000+ candidates smoothly.
+  - Drag-and-drop Kanban board (using @dnd-kit) for moving candidates through stages.
+  - Candidate creation modal with job assignment.
+
+- Assessment builder
+  - Create multi-section assessments with multiple question types (short/long text, single/multi choice, numeric, file stub).
+  - Conditional logic (show/hide questions based on prior answers).
+  - Live preview with client-side validation.
+
+- Seed data
+  - On first run the app seeds:
+    - ~25 example jobs
+    - ~1,000 candidates (modern Indian names, avatars)
+    - Sample assessments for a few jobs
+
+---
+
+## Tech stack
+
+- Framework: React 18 (Vite)
+- Styling: Tailwind CSS (+ @tailwindcss/forms recommended)
+- Local DB: Dexie.js (IndexedDB)
+- API mocking: Mock Service Worker (MSW)
+- Drag & drop: @dnd-kit (core, sortable, utilities)
+- List virtualization: react-window
+- Icons: lucide-react
+- Testing & dev tooling: Vite, Node.js
+
+---
+
+## Getting started
+
+Prerequisites
+- Node.js v16+ (v18+ recommended)
+- npm, yarn, or pnpm
+- Familiarity with Vite-based React apps
+
+Quick setup
+1. Clone the repo:
+   ```bash
+   git clone <repo-url> talentflow
+   cd talentflow
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   # yarn
+   # pnpm install
+   ```
+
+3. Initialize MSW (run once to create the service worker file in `public/`):
+   ```bash
+   npx msw init public/
+   ```
+
+4. Tailwind CSS (if not already configured)
+   ```bash
+   npx tailwindcss init -p
+   # then set `content` in tailwind.config.js to include ./index.html and ./src/**/*.{js,jsx,ts,tsx}
+   ```
+
+5. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+   Open the Vite URL (typically http://localhost:5173).
+
+Notes about the MSW startup
+- The app expects the MSW worker to be started before React mounts. Example entry point (src/main.jsx):
+  ```js
+  import App, { worker } from './App.jsx';
+  import './index.css';
+
+  worker.start({ onUnhandledRequest: 'bypass' }).then(() => {
+    createRoot(document.getElementById('root')).render(<App />);
+  });
+  ```
+
+---
+
+## Project structure (overview)
+A recommended folder layout (project may vary after refactor):
+
+- src/
+  - components/        — reusable UI components (buttons, inputs, modals)
+  - pages/             — top-level pages (Jobs, Candidates, JobDetail)
+  - api/               — MSW handlers (if separated)
+  - db.js              — Dexie database schema and helpers
+  - App.jsx            — main app wiring (routing, provider, MSW worker export)
+  - main.jsx           — app entry (starts MSW then mounts React)
+  - index.css          — Tailwind + custom CSS
+
+---
+
+## Operational notes & troubleshooting
+
+- react-window "does not provide export named FixedSizeList"
+  - Cause: ESM/CJS interop differences with Vite or package versions.
+  - Fix: Import defensively:
+    ```js
+    import * as ReactWindow from 'react-window';
+    const FixedSizeList = ReactWindow.FixedSizeList || ReactWindow.default?.FixedSizeList;
+    ```
+  - Alternative: pin a react-window version that matches your bundler.
+
+- Dexie DataError on bulk reorder (PATCH /jobs/reorder)
+  - Cause: Passing invalid keys/objects into IndexedDB (e.g., strings or malformed entries) triggers IDBKeyRange errors.
+  - Fix: Validate and sanitize payload on the handler; coerce string IDs to numbers and update per-record using db.jobs.update(id, { order }) inside a transaction.
+
+- Random 500 responses from MSW
+  - The mock API intentionally simulates write errors to exercise optimistic UI and rollback handling. These are normal for testing resilience.
+
+- React Strict Mode / double initialization
+  - React 18 may run certain setup effects twice in development. Guard one-time side-effects (like DB seeding) with a ref.
+
+- DnD measurement loops / "Maximum update depth exceeded"
+  - Pass a stable numeric width to react-window (measure container once with ResizeObserver) and memoize row renderers to avoid repeated layout measurement loops that interact poorly with DnD measurement.
+
+---
+
+## Project purpose
+TALENTFLOW was built as a portfolio project to demonstrate frontend engineering capabilities from the perspective of a backend/MLOps/cloud-focused engineer. The app intentionally exercises integration points that are common in production applications:
+- local persistence and sync concerns (IndexedDB/Dexie),
+- robust UI patterns for optimistic updates and rollback,
+- accessibility-minded drag-and-drop interactions,
+- performance under large lists (virtualization),
+- and realistic API behavior (latency and intermittent failures via MSW).
+
+---
+
+## Author
+Priyanshu Kumar  
+Backend / MLOps / Cloud enthusiast. Building scalable systems and exploring advanced frontend UX to complement backend expertise.
+
+- GitHub: https://github.com/priyanshuk6395  
+- LinkedIn: https://www.linkedin.com/in/priyanshu-kumar-51452b232/
+
+---
+
+If you'd like, I can add a short troubleshooting script, automated dev/start scripts, or a CONTRIBUTING guide next.

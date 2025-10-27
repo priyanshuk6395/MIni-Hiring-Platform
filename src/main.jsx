@@ -1,7 +1,8 @@
 // src/main.jsx
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App, { worker } from './App.jsx'
+import App from './App.jsx'
+import { worker } from './api/browser.js'
 import './index.css'
 
 // Start the service worker
