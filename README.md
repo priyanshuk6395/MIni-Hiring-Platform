@@ -3,6 +3,8 @@
 A high-fidelity React application that simulates a hiring platform as a portfolio piece. TALENTFLOW demonstrates advanced frontend capabilities — complex state management, persistent local storage, realistic API mocking, drag-and-drop UIs, and list virtualization — built by a developer with a backend / MLOps / cloud focus to showcase full‑stack proficiency.
 
 ---
+## Deployed Link : https://m-ini-hiring-platform.vercel.app/
+---
 
 ## Table of contents
 - [Overview](#overview)
@@ -169,7 +171,7 @@ TALENTFLOW was built as a portfolio project to demonstrate frontend engineering 
 
 ## Author
 Priyanshu Kumar  
-Backend / MLOps / Cloud enthusiast. Building scalable systems and exploring advanced frontend UX to complement backend expertise.
+Backend enthusiast. Building scalable systems and exploring advanced frontend UX to complement backend expertise.
 
 - GitHub: https://github.com/priyanshuk6395  
 - LinkedIn: https://www.linkedin.com/in/priyanshu-kumar-51452b232/
